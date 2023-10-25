@@ -7,11 +7,9 @@
 
 import SwiftUI
 
-struct ContentView: View {
-    @State var name = ""
+struct LoginView: View {
+    @State var email = ""
     @State var password = ""
-    @State var size: CGSize = .zero
-    
     @State var isLoginMode = false
 
     var body: some View {
@@ -24,8 +22,6 @@ struct ContentView: View {
                         .tag(false)
                 }
                 .pickerStyle(.segmented)
-                .frame(height: 30)
-                .background(.gray)
                 .padding()
                 
                 VStack(spacing: 25) {
@@ -47,57 +43,52 @@ struct ContentView: View {
                             
                         }
                     }
-                    
                     VStack(spacing: 5) {
-                        TextField("Name", text: $name)
-                            .font(.system(size: 14, weight: .regular))
-                            .frame(width: size.width - 50, height: 50)
-                            .padding(.horizontal, 10)
-                            .border(.black)
-                            .background(.white)
-                            .keyboardType(.emailAddress)
-                            .autocapitalization(.none)
-                        
-                        SecureField("Password", text: $password)
-                            .font(.system(size: 14, weight: .regular))
-                            .frame(width: size.width - 50, height: 50)
-                            .padding(.horizontal, 10)
-                            .border(.black)
-                            .background(.white)
+                        Group {
+                            TextField("Name", text: $email)
+                            SecureField("Password", text: $password)
+                        }
+                        .font(.system(size: 14, weight: .regular))
+                        .padding(12)
+                        .background(.white)
                     }
                     
                     Button {
                         //action
+                        handleAction()
                     } label: {
-                        Text("Log in")
-                            .font(.system(size: 14, weight: .regular))
-                            .foregroundStyle(.white)
-                        
+                        HStack {
+                            Spacer()
+                            Text(isLoginMode ? "Log in" : "Create Account")
+                                .foregroundStyle(.white)
+                                .padding(.vertical, 10)
+                                .font(.system(size: 14, weight: .semibold))
+                            Spacer()
+                        }
+
                     }
-                    .frame(width: size.width - 50, height: 50)
-                    .padding(.horizontal, 10)
                     .background(.blue)
                     
                     Spacer()
                 }
-
-                GeometryReader { proxy in
-                    HStack {}
-                        .onAppear {
-                            size = proxy.size
-                        }
-                }
-                
-                
+                .padding(.horizontal)
             }
             .navigationTitle( isLoginMode ? "Log in" : "Create Account")
-            .background(.purple)
+            .background(Color(.init(white: 0, alpha: 0.05)).ignoresSafeArea())
             
+        }
+    }
+    
+    private func handleAction() {
+        if isLoginMode {
+            print("should log into firebase with existing cred")
+        } else {
+            print("create new user on firebase")
         }
     }
 }
 
 
 #Preview {
-    ContentView()
+    LoginView()
 }
