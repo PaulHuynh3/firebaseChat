@@ -12,56 +12,54 @@ struct ContentView: View {
     @State var password = ""
     @State var size: CGSize = .zero
     
-    @State var isLoginMode = ""
+    @State var isLoginMode = false
 
     var body: some View {
         NavigationView {
             ScrollView {
-                Picker(selection: $isLoginMode) {
-                    
+                Picker("Picker", selection: $isLoginMode) {
                     Text("Login")
+                        .tag(true)
                     Text("Create Account")
-                    
-                } label: {
-                    Text("Login")
-                        .font(.system(size: 14))
+                        .tag(false)
                 }
                 .pickerStyle(.segmented)
                 .frame(height: 30)
                 .background(.gray)
-                
+                .padding()
 
-                
-                VStack(spacing: 25) {
-                    VStack(spacing: 5) {
-                        TextField("Name", text: $name)
-                            .font(.system(size: 14, weight: .regular))
-                            .frame(width: size.width - 50, height: 50)
-                            .padding(.horizontal, 10)
-                            .border(.black)
-                            .background(.white)
+                if isLoginMode {
+                    VStack(spacing: 25) {
+                        VStack(spacing: 5) {
+                            TextField("Name", text: $name)
+                                .font(.system(size: 14, weight: .regular))
+                                .frame(width: size.width - 50, height: 50)
+                                .padding(.horizontal, 10)
+                                .border(.black)
+                                .background(.white)
+                            
+                            TextField("Password", text: $password)
+                                .font(.system(size: 14, weight: .regular))
+                                .frame(width: size.width - 50, height: 50)
+                                .padding(.horizontal, 10)
+                                .border(.black)
+                                .background(.white)
+                        }
                         
-                        TextField("Password", text: $password)
-                            .font(.system(size: 14, weight: .regular))
-                            .frame(width: size.width - 50, height: 50)
-                            .padding(.horizontal, 10)
-                            .border(.black)
-                            .background(.white)
-                    }
-                    
-                    Button {
-                        //action
-                    } label: {
-                        Text("Log in")
-                            .font(.system(size: 14, weight: .regular))
-                            .foregroundStyle(.white)
+                        Button {
+                            //action
+                        } label: {
+                            Text("Log in")
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundStyle(.white)
+                            
+                        }
+                        .frame(width: size.width - 50, height: 50)
+                        .padding(.horizontal, 10)
+                        .background(.blue)
                         
+                        Spacer()
                     }
-                    .frame(width: size.width - 50, height: 50)
-                    .padding(.horizontal, 10)
-                    .background(.blue)
-                    
-                    Spacer()
                 }
 
                 
