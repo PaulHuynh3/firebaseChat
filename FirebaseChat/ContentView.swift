@@ -27,42 +27,59 @@ struct ContentView: View {
                 .frame(height: 30)
                 .background(.gray)
                 .padding()
-
-                if isLoginMode {
-                    VStack(spacing: 25) {
-                        VStack(spacing: 5) {
-                            TextField("Name", text: $name)
-                                .font(.system(size: 14, weight: .regular))
-                                .frame(width: size.width - 50, height: 50)
-                                .padding(.horizontal, 10)
-                                .border(.black)
-                                .background(.white)
-                            
-                            TextField("Password", text: $password)
-                                .font(.system(size: 14, weight: .regular))
-                                .frame(width: size.width - 50, height: 50)
-                                .padding(.horizontal, 10)
-                                .border(.black)
-                                .background(.white)
-                        }
-                        
-                        Button {
-                            //action
-                        } label: {
-                            Text("Log in")
-                                .font(.system(size: 14, weight: .regular))
-                                .foregroundStyle(.white)
-                            
-                        }
-                        .frame(width: size.width - 50, height: 50)
-                        .padding(.horizontal, 10)
-                        .background(.blue)
-                        
-                        Spacer()
-                    }
-                }
-
                 
+                VStack(spacing: 25) {
+                    if !isLoginMode {
+                        Button {
+                            
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .frame(width: 150, height: 150)
+                                    .background(.orange)
+                                
+                                Image(systemName: "person.fill")
+                                    .font(.system(size: 64))
+                                    .padding()
+                                    .tint(.black)
+                            }
+                            .background(.purple)
+                            
+                        }
+                    }
+                    
+                    VStack(spacing: 5) {
+                        TextField("Name", text: $name)
+                            .font(.system(size: 14, weight: .regular))
+                            .frame(width: size.width - 50, height: 50)
+                            .padding(.horizontal, 10)
+                            .border(.black)
+                            .background(.white)
+                            .keyboardType(.emailAddress)
+                            .autocapitalization(.none)
+                        
+                        SecureField("Password", text: $password)
+                            .font(.system(size: 14, weight: .regular))
+                            .frame(width: size.width - 50, height: 50)
+                            .padding(.horizontal, 10)
+                            .border(.black)
+                            .background(.white)
+                    }
+                    
+                    Button {
+                        //action
+                    } label: {
+                        Text("Log in")
+                            .font(.system(size: 14, weight: .regular))
+                            .foregroundStyle(.white)
+                        
+                    }
+                    .frame(width: size.width - 50, height: 50)
+                    .padding(.horizontal, 10)
+                    .background(.blue)
+                    
+                    Spacer()
+                }
 
                 GeometryReader { proxy in
                     HStack {}
@@ -73,7 +90,7 @@ struct ContentView: View {
                 
                 
             }
-            .navigationTitle("Log in")
+            .navigationTitle( isLoginMode ? "Log in" : "Create Account")
             .background(.purple)
             
         }
