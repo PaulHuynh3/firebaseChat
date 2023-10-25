@@ -11,10 +11,27 @@ struct ContentView: View {
     @State var name = ""
     @State var password = ""
     @State var size: CGSize = .zero
+    
+    @State var isLoginMode = ""
 
     var body: some View {
         NavigationView {
-            ZStack {
+            ScrollView {
+                Picker(selection: $isLoginMode) {
+                    
+                    Text("Login")
+                    Text("Create Account")
+                    
+                } label: {
+                    Text("Login")
+                        .font(.system(size: 14))
+                }
+                .pickerStyle(.segmented)
+                .frame(height: 30)
+                .background(.gray)
+                
+
+                
                 VStack(spacing: 25) {
                     VStack(spacing: 5) {
                         TextField("Name", text: $name)
@@ -44,9 +61,11 @@ struct ContentView: View {
                     .padding(.horizontal, 10)
                     .background(.blue)
                     
-//                    Spacer()
+                    Spacer()
                 }
+
                 
+
                 GeometryReader { proxy in
                     HStack {}
                         .onAppear {
