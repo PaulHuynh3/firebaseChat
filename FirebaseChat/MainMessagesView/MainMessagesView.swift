@@ -7,8 +7,65 @@
 
 import SwiftUI
 
+struct ChatUser {
+    let uid, email, profileImageUrl: String
+}
+
+class MainMessageViewModel: ObservableObject {
+    
+    @Published var errorMessage = ""
+    @Published var chatUser: ChatUser?
+    
+    init() {
+        fetchCurrentUser()
+    }
+    
+    func fetchCurrentUser() {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else {
+            errorMessage = "Could not find firebase uid"
+            return
+        }
+        FirebaseManager.shared.fireStore.collection("users").document(uid).getDocument { snapshot, err in
+            if let error = err {
+                self.errorMessage = "failed to fetch current user: \(error)"
+                return
+            }
+            
+            guard let data = snapshot?.data() else {
+                self.errorMessage = "No data found"
+                return
+            }
+            
+            let uid = data["uid"] as? String ?? ""
+            let email = data["email"] as? String ?? ""
+            let profileImageUrl = data["profileImageUrl"] as? String ?? ""
+            self.chatUser = ChatUser(uid: uid, email: email, profileImageUrl: profileImageUrl)
+            
+//            self.errorMessage = chatUser.profileImageUrl
+            
+        }
+    }
+}
+
 struct MainMessagesView: View {
     @State var shouldShowLogOutOptions = false
+    
+    @ObservedObject private var vm = MainMessageViewModel()
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("User \(vm.errorMessage)")
+                
+                customNavBar
+                messagesView
+            }
+            .overlay(alignment: .bottom) {
+                newMessageButton
+            }
+            .navigationBarHidden(true)
+        }
+    }
     
     private var customNavBar: some View {
         VStack {
@@ -17,7 +74,7 @@ struct MainMessagesView: View {
                     .font(.system(size: 34, weight: .heavy))
                 
                 VStack(alignment: .leading ,spacing: 4) {
-                    Text("UserName")
+                    Text(vm.chatUser?.email ?? "")
                         .font(.system(size: 24, weight: .bold))
                     HStack {
                         Circle()
@@ -48,19 +105,6 @@ struct MainMessagesView: View {
             }
             .background(.red)
 
-        }
-    }
-    
-    var body: some View {
-        NavigationView {
-            VStack {
-                customNavBar
-                messagesView
-            }
-            .overlay(alignment: .bottom) {
-                newMessageButton
-            }
-            .navigationBarHidden(true)
         }
     }
 }
