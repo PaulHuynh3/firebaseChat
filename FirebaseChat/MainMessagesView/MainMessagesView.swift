@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct ChatUser {
     let uid, email, profileImageUrl: String
@@ -70,11 +71,17 @@ struct MainMessagesView: View {
     private var customNavBar: some View {
         VStack {
             HStack {
-                Image(systemName: "person")
-                    .font(.system(size: 34, weight: .heavy))
+                WebImage(url: URL(string: vm.chatUser?.profileImageUrl ?? "")).resizable()
+                    .scaledToFill()
+                    .frame(width: 50, height: 50)
+                    .clipped()
+                    .cornerRadius(50)
+                    .overlay(RoundedRectangle(cornerRadius: 44)
+                        .stroke(Color(.label), lineWidth: 1))
+                    .shadow(radius: 5)
                 
                 VStack(alignment: .leading ,spacing: 4) {
-                    Text(vm.chatUser?.email ?? "")
+                    Text(vm.chatUser?.email.replacingOccurrences(of: "@gmail.com", with: "") ?? "")
                         .font(.system(size: 24, weight: .bold))
                     HStack {
                         Circle()
